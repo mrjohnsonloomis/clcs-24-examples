@@ -20,9 +20,10 @@ student_2 = {
     'courses': ['Spanish', 'Math', 'Art']}
 
 ### YOUR CODE GOES BELOW HERE ###
-print(student_1['name'])
-student_1['name'] = 'James Harden'
-print(student_1['name'])
+print(student_1['id_num'])
+student_1['courses']
+student_2['courses']
+
 
 #PART B
 
@@ -40,4 +41,6 @@ students = {'student_1' : {
     }
 
 ### YOUR CODE GOES BELOW HERE ###
-print(students['student_1']['name'])
+for student in students:
+    print(students[student]['id_num'])
+    print(students[student]['courses'][2])
