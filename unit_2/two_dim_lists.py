@@ -28,8 +28,6 @@ def display_grade_sheet(grade_sheet: list[list[str]]) -> None:
         print()
     print()
 
-# Rest of your code remains the same
-
 
 # Pre-populated grade sheet
 grade_sheet = [
