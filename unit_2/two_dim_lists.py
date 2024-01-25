@@ -23,9 +23,13 @@ def calculate_average(grade_sheet: list[list[str]], student_name: str) -> float:
 def display_grade_sheet(grade_sheet: list[list[str]]) -> None:
     for row in grade_sheet:
         for item in row:
-            print(f"{item}\t", end="")
+            # Print each item with fixed spacing
+            print(f"{item:<15}", end="")
         print()
     print()
+
+# Rest of your code remains the same
+
 
 # Pre-populated grade sheet
 grade_sheet = [
