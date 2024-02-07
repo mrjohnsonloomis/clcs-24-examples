@@ -1,5 +1,5 @@
 # Create a dictionary with tuple keys
-student_grades = {('John', 'Doe'): 'A', ('Jane', 'Doe'): 'B'}
+student_grades = {('John', 'Doe'): 'A', ('Jane', 'Doe'): 'A'}
 
 # Access a value using a tuple key
 print(student_grades[('John', 'Doe')])
