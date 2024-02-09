@@ -3,7 +3,7 @@ class Student():
     id_counter = 0
 
     #Constructor 
-    def __init__(self, last, first):
+    def __init__(self, last:str, first:str):
         '''Create a new student object. Requires last name, first name as parameters'''
         Student.id_counter += 1
 
@@ -15,28 +15,28 @@ class Student():
 
     #Instance Methods
     
-    def __str__(self):
+    def __str__(self)->str:
         '''__str__ method to control how this object gets printed / stored as a string'''
         return(f'First Name: {self.first_name}\nLast Name: {self.last_name}\nID#: {self.id_num}\n')
     
-    def set_classes (self, classes_list):
+    def set_classes (self, classes_list: list)->None:
         '''Takes a list of classes as an argument and updates the default empty list with that list'''
         self.classes = classes_list
     
-    def add_class (self, class_name):
+    def add_class (self, class_name:str)->None:
         '''Adds a class to the list of classes'''
         self.classes.append(class_name)
 
-    def remove_class (self, class_name):
+    def remove_class (self, class_name:str)->None:
         '''Removes class from classes list'''
         if class_name in self.classes:
             self.classes.remove(class_name)
         else:
             print(f'{self.first_name} is not enrolled in {class_name}. ')
     
-    def print_classes(self):
+    def print_classes(self)->None:
         '''prints out the classes in an organized way'''
-        print('Currently enrolled in:\n')
+        print(f'{self.first_name} {self.last_name} is currently enrolled in:')
         for classes in self.classes:
             print(classes)
     
