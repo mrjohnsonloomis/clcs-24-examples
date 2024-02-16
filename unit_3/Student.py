@@ -3,7 +3,7 @@ class Student():
     id_counter = 0
 
     #Constructor 
-    def __init__(self, last:str, first:str):
+    def __init__(self, last:str, first:str)->None:
         '''Create a new student object. Requires last name, first name as parameters'''
         Student.id_counter += 1
 
