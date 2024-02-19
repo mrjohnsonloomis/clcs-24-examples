@@ -1,5 +1,5 @@
-from LibraryUser import *
-from Book import *
+from LibraryUser import LibraryUser
+from Book import Book
 
 info = ['mjohnson', 'password', 'Matt', 'Johnson', '4 Batchelder Road, Windsor CT', '6094397160']
 user1 = LibraryUser(info)
