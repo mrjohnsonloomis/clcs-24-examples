@@ -3,7 +3,7 @@ class LibraryUser:
     id_counter = 1
 
 #Constructor -- takes in a list of info as a parameter
-    def __init__(self, info):
+    def __init__(self, info, email):
         '''info is a list read in from a line from a form on the website (which is stored in a csv file)'''
         self.username = info[0]
         self.password = info[1]
@@ -16,6 +16,7 @@ class LibraryUser:
         self.has_late = False
         self.books_out = []
         self.book_history = []
+        self.email = email
 
         #increases the ID coutner to create a new, unique ID each time the constructor is called
         LibraryUser.id_counter += 1

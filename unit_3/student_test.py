@@ -7,7 +7,8 @@ if __name__=='__main__':
     s1 = Student('Smith', 'John')
     s2 = Student('Doe', 'Jane')
     
-    print(s1.id_num)
+    print(s1.first_name)
+    print(s2)
 
     s2.set_classes(['Math', 'Science', 'History'])
     s2.print_classes()
