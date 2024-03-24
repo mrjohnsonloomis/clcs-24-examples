@@ -1,0 +1,3 @@
+HELLO, EVERYONE!!!
+/usr/local/bin/python3 "/Users/mjohnson/cs github/clcs-24-examples/unit_3/file_review.py"
+woohoo spring break
