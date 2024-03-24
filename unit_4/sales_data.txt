@@ -1,0 +1,12 @@
+January,150
+February,180
+March,200
+April,220
+May,240
+June,260
+July,280
+August,300
+September,280
+October,260
+November,230
+December,190
