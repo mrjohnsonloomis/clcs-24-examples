@@ -1,0 +1,15 @@
+Mathematics,85
+Science,90
+English,78
+History,82
+Art,95
+Mathematics,88
+Science,85
+English,82
+History,79
+Art,92
+Mathematics,90
+Science,88
+English,80
+History,85
+Art,94

@@ -15,6 +15,7 @@ plt.legend()  # Adding a legend
 plt.grid(True)  # Adding a grid
 plt.show()  # Displaying the chart
 
+
 # Creating data for the bar chart
 categories = ['A', 'B', 'C', 'D', 'E']
 values = [10, 20, 15, 25, 18]
