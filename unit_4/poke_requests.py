@@ -6,10 +6,10 @@ import requests
 name = input('What pokemon do you want? : ')
 
 # Think of this as accessing the data found at that endpoint.
-response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{name}')
+r = requests.get(f'https://pokeapi.co/api/v2/pokemon/{name}')
 
 # Getting the url response and reading it in JSON format
-pokemon_info = response.json()
+pokemon_info = r.json()
 
 # Now it's just simple dictionary work to collect data
 name = pokemon_info['name']
