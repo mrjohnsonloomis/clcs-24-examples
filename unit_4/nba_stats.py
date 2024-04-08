@@ -1,7 +1,7 @@
 import requests
 
 url = 'http://api.balldontlie.io/v1/players/?search={name}'
-api_key = '3212288b-91af-408c-8471-518cd5fca5e5'
+api_key = #your key here
 header = {'Authorization': api_key}
 
 r = requests.get(url, headers=header)
