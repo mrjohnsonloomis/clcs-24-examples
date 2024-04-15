@@ -1,6 +1,6 @@
 import requests
 
-url = 'https://loomischaffee.org'
+url = 'https://www.google.com/'
 
 r = requests.get(url)
 
