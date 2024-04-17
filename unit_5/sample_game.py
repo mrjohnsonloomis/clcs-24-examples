@@ -2,7 +2,7 @@ import pygame, sys
 
 # Global variables
 screen_width = 1280
-screen_height = 960
+screen_height = 860
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -21,14 +21,27 @@ class Player(pygame.sprite.Sprite):
         if key[pygame.K_DOWN]: # down key
             self.rect.y += dist # move down
         elif key[pygame.K_UP]: # up key
-            self.rect.y -= dist # move up
+            self.rect.y -= dist * 3 # move up (compensate for gravity)
         if key[pygame.K_RIGHT]: # right key
             self.rect.x += dist # move right
         elif key[pygame.K_LEFT]: # left key
             self.rect.x -= dist # move left
 
+        if self.rect.right >= screen_width:
+            self.rect.right = screen_width
+        elif self.rect.x < 0:
+            self.rect.x = 0
+        elif self.rect.bottom >= screen_height:
+            self.rect.bottom = screen_height
+        elif self.rect.y < 0:
+            self.rect.y = 0
+        
     def update(self):
         self.handle_keys()
+
+        self.rect.bottom += 5
+        if self.rect.bottom <= 0:
+            self.rect.bottom = 0
 
 # General setup
 pygame.init()
