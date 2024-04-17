@@ -14,15 +14,21 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [screen_width // 2, screen_height // 2]
 
-    def update(self, keys_pressed):
-        if keys_pressed[pygame.K_UP]:
-            self.rect.y -= 5
-        if keys_pressed[pygame.K_DOWN]:
-            self.rect.y += 5
-        if keys_pressed[pygame.K_LEFT]:
-            self.rect.x -= 5
-        if keys_pressed[pygame.K_RIGHT]:
-            self.rect.x += 5
+    def handle_keys(self):
+        """ Handles Keys """
+        key = pygame.key.get_pressed()
+        dist = 5 # distance moved in 1 frame
+        if key[pygame.K_DOWN]: # down key
+            self.rect.y += dist # move down
+        elif key[pygame.K_UP]: # up key
+            self.rect.y -= dist # move up
+        if key[pygame.K_RIGHT]: # right key
+            self.rect.x += dist # move right
+        elif key[pygame.K_LEFT]: # left key
+            self.rect.x -= dist # move left
+
+    def update(self):
+        self.handle_keys()
 
 # General setup
 pygame.init()
@@ -42,9 +48,8 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # Update player position based on keyboard inputs
-    keys_pressed = pygame.key.get_pressed()
-    player.update(keys_pressed)
+    # Update
+    all_sprites.update()
 
     # Drawing
     screen.fill(WHITE)  # Clear screen with white background
