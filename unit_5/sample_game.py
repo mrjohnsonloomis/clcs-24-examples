@@ -1,11 +1,11 @@
-import pygame, sys
+import pygame, sys, random
 
 # Global variables
 screen_width = 1280
 screen_height = 860
 
 # Custom events
-stepping = pygame.USEREVENT + 1
+lives = pygame.USEREVENT + 1
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -22,7 +22,19 @@ class Background(pygame.sprite.Sprite):
         self.rect.x += self.speed
         if self.rect.right < 0:
             self.rect.x += self.rect.width*2
-        
+
+class Rock(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('player_image.png'), (25,25))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [random.randint(0, screen_width), 0]  
+    
+    def update(self):
+        self.rect.y += 5
+        if self.rect.top > screen_height:
+            self.rect.bottom = 0
+            self.rect.topleft = [random.randint(0, screen_width), 0]
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -54,10 +66,8 @@ class Player(pygame.sprite.Sprite):
 
         if key[pygame.K_RIGHT]:  # right key
             self.rect.x += dist  # move right
-            pygame.event.post(pygame.event.Event(stepping))
         elif key[pygame.K_LEFT]:  # left key
             self.rect.x -= dist  # move left
-            pygame.event.post(pygame.event.Event(stepping))
 
         # Screen boundary checks
         if self.rect.right >= screen_width:
@@ -77,24 +87,50 @@ pygame.display.set_caption('Simple Sprite Game')
 
 # Instantiate player and background
 player = Player()
-
+rock = Rock()
 bg1 = Background(0)
 bg2 = Background(1)
 
 bg_group = pygame.sprite.Group(bg1, bg2)
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
+player_group = pygame.sprite.Group()
+rock_group = pygame.sprite.Group()
+player_group.add(player)
+rock_group.add(rock)
 
-steps = 0
+all_sprites = pygame.sprite.Group(player, rock)
+
+'''# Function to check for collisions
+def check_collisions(rock_group, player_group):
+    for rock in rock_group:
+        for player in player_group:
+            if rock.rect.colliderect(player.rect):
+                rock.rect.bottom = 0
+                pygame.event.post(pygame.event.Event(lives))
+'''
+def check_collisions(rock_group, player_group): 
+    for rock in rock_group:
+        for player in player_group:
+            if rock.rect.colliderect(player.rect):
+                rock.rect.topleft = [random.randint(0, screen_width), 0]
+                pygame.event.post(pygame.event.Event(lives))
+lives = 3
 # Game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == stepping:
-            steps += 1
-            print(f"Steps: {steps}")
+        elif event.type == lives:
+            print("Lives -1")
+            lives -= 1
+            if lives == 0:
+                print("Game Over")
+                pygame.quit()
+                sys.exit()
+    
+    # Check for collisions
+    check_collisions(rock_group, player_group)
+            
     # Update
     bg_group.update()
     all_sprites.update()
