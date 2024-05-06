@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.handle_keys()
 
+
 # General setup
 pygame.init()
 clock = pygame.time.Clock()
@@ -99,14 +100,35 @@ rock_group.add(rock)
 
 all_sprites = pygame.sprite.Group(player, rock)
 
-'''# Function to check for collisions
-def check_collisions(rock_group, player_group):
-    for rock in rock_group:
-        for player in player_group:
-            if rock.rect.colliderect(player.rect):
-                rock.rect.bottom = 0
-                pygame.event.post(pygame.event.Event(lives))
-'''
+
+def display_text(screen, message, position, font='Arial', size=48, color=(255, 255, 255)):
+    """
+    Display text on the given Pygame screen.
+
+    Argumentss:
+    screen: The Pygame display surface to draw on. (req)
+    message: The string of text to display. (req)
+    position: A tuple (x, y) representing where to center the text on the screen. (req)
+    font: The name of the font to use. (default)
+    size: The size of the font. (default)
+    color: A tuple (r, g, b) representing the color of the text. (default = white)
+
+    """
+    # Initialize font
+    font = pygame.font.SysFont(font, size)
+    
+    # Render the text
+    message = str(message)
+    text_surface = font.render(message, True, color)
+    
+    # Create a rectangle for positioning
+    text_rect = text_surface.get_rect()
+    text_rect.center = position
+    
+    # Blit the text onto the screen
+    screen.blit(text_surface, text_rect)
+
+
 def check_collisions(rock_group, player_group): 
     for rock in rock_group:
         for player in player_group:
@@ -125,12 +147,13 @@ while True:
             lives -= 1
             if lives == 0:
                 print("Game Over")
+                #display_text(dkflsdjkl;a)
                 pygame.quit()
                 sys.exit()
     
     # Check for collisions
     check_collisions(rock_group, player_group)
-            
+          
     # Update
     bg_group.update()
     all_sprites.update()
@@ -139,6 +162,7 @@ while True:
     screen.fill(WHITE)  # Clear screen with white background
     bg_group.draw(screen)
     all_sprites.draw(screen)  # Draw all sprites
+    display_text(screen, f'Lives: {lives}', (150,100))
 
     # Updating the window
     pygame.display.flip()
