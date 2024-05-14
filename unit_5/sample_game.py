@@ -23,18 +23,19 @@ class Background(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.rect.x += self.rect.width*2
 
-class Rock(pygame.sprite.Sprite):
-    def __init__(self):
+class Laser(pygame.sprite.Sprite):
+    def __init__(self, player):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('player_image.png'), (25,25))
+        self.player = player
+        self.image = pygame.transform.scale(pygame.image.load('laser.png'), (10,10))
         self.rect = self.image.get_rect()
-        self.rect.topleft = [random.randint(0, screen_width), 0]  
+        self.rect.bottomleft = self.player.rect.topright
     
     def update(self):
-        self.rect.y += 5
-        if self.rect.top > screen_height:
-            self.rect.bottom = 0
-            self.rect.topleft = [random.randint(0, screen_width), 0]
+        self.rect.x += 5
+
+        if self.rect.right > screen_width:
+            self.kill()
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -42,32 +43,33 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load('player_image.png'), (90,90))
         self.rect = self.image.get_rect()
         self.rect.center = [screen_width // 2, screen_height]
-
+        self.mask = pygame.mask.from_surface(self.image)
+        self.dist = 5
+        self.on_ground = True
+        self.on_platform = False
     def handle_keys(self):
         """Handles Keys and ground status"""
         key = pygame.key.get_pressed()
-        dist = 5  # distance moved in 1 frame
-        
         # Check ground status
-        if self.rect.bottom >= screen_height:
+        if self.rect.bottom >= screen_height & self.on_platform == False:
             self.on_ground = True
             self.rect.bottom = screen_height
         else:
             self.on_ground = False
-            self.rect.y += dist/2  # move down (simulate gravity)
+            self.rect.y += self.dist/2  # move down (simulate gravity)
 
         if key[pygame.K_DOWN]:  # down key
             if self.rect.bottom < screen_height:  # Prevent moving down into the ground
-                self.rect.y += dist  # move down
+                self.rect.y += self.dist  # move down
         elif key[pygame.K_UP]:  # up key
             if self.on_ground:  # Only jump if on the ground
-                self.rect.y -= dist * 10  # jump up (compensate for gravity)
+                self.rect.y -= self.dist * 10  # jump up (compensate for gravity)
                 self.on_ground = False  # Set on_ground to False as it jumps
 
         if key[pygame.K_RIGHT]:  # right key
-            self.rect.x += dist  # move right
+            self.rect.x += self.dist  # move right
         elif key[pygame.K_LEFT]:  # left key
-            self.rect.x -= dist  # move left
+            self.rect.x -= self.dist  # move left
 
         # Screen boundary checks
         if self.rect.right >= screen_width:
@@ -79,6 +81,13 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.handle_keys()
 
+class Platform(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('platform.jpg'), (250,90))
+        self.rect = self.image.get_rect()
+        self.rect.center = [screen_width // 2, screen_height]
+        self.mask = pygame.mask.from_surface(self.image)
 
 # General setup
 pygame.init()
@@ -88,17 +97,18 @@ pygame.display.set_caption('Simple Sprite Game')
 
 # Instantiate player and background
 player = Player()
-rock = Rock()
+laser = Laser(player)
 bg1 = Background(0)
 bg2 = Background(1)
 
 bg_group = pygame.sprite.Group(bg1, bg2)
 player_group = pygame.sprite.Group()
-rock_group = pygame.sprite.Group()
+laser_group = pygame.sprite.Group(laser)
+plat_group = pygame.sprite.Group(Platform())
 player_group.add(player)
-rock_group.add(rock)
 
-all_sprites = pygame.sprite.Group(player, rock)
+
+all_sprites = pygame.sprite.Group(player)
 
 
 def display_text(screen, message, position, font='Arial', size=48, color=(255, 255, 255)):
@@ -128,6 +138,15 @@ def display_text(screen, message, position, font='Arial', size=48, color=(255, 2
     # Blit the text onto the screen
     screen.blit(text_surface, text_rect)
 
+def platform_check(player, platform):
+    # Calculate offset
+    offset_x = platform.rect.x - player.rect.x
+    offset_y = platform.rect.y - player.rect.y
+
+    # Check for collision
+    if player.mask.overlap(platform.mask, (offset_x, offset_y)):
+        player.rect.bottom = platform.rect.top
+        player.on_ground = True
 
 def check_collisions(rock_group, player_group): 
     for rock in rock_group:
@@ -147,21 +166,28 @@ while True:
             lives -= 1
             if lives == 0:
                 print("Game Over")
-                #display_text(dkflsdjkl;a)
+                display_text(screen, 'Game over!', (screen_width/2, screen_height/2))
                 pygame.quit()
                 sys.exit()
-    
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                laser = Laser(player)
+                laser_group.add(laser)
+
     # Check for collisions
-    check_collisions(rock_group, player_group)
-          
+    #check_collisions(player_group)
+    platform_check(player, plat_group.sprites()[0])      
     # Update
     bg_group.update()
     all_sprites.update()
+    laser_group.update()
 
     # Drawing
     screen.fill(WHITE)  # Clear screen with white background
     bg_group.draw(screen)
     all_sprites.draw(screen)  # Draw all sprites
+    #plat_group.draw(screen)
+    laser_group.draw(screen)
     display_text(screen, f'Lives: {lives}', (150,100))
 
     # Updating the window
